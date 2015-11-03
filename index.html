@@ -1,0 +1,298 @@
+<html>
+<head>
+	<title>Dynamic Form - HTML 5</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<style type="text/css">
+#buttons button {
+	margin: auto;
+}
+
+#formBtn {
+	font-size: 20px;
+	margin: auto;
+	display: block;
+}
+</style>
+
+</head>
+<body>
+
+	<button id="formBtn" onclick="addElement('form');">Create Form</button>
+	<br/>
+
+<div id="buttons" style="visibility: hidden;">
+	
+	<button id="add1" onclick="addElement('text');">Text</button>
+	<button id="add1" onclick="addElement('password');">Password</button>
+	<button id="add1" onclick="addElement('select');">Select > Options</button>
+	<button id="add1" onclick="addElement('radio');">Radio</button>
+	<button id="add1" onclick="addElement('checkbox');">Check Box</button>
+	<button id="add1" onclick="addElement('file');">File</button>
+	<button id="add1" onclick="addElement('datainit');">Datainit > options</button>
+	<button id="add1" onclick="addElement('number');">Numbers</button>
+	<button id="add1" onclick="addElement('keygen');">Keygen</button>
+	<button id="add1" onclick="addElement('textarea');">Text Area</button>
+	<button id="add1" onclick="addElement('output');">Output</button>
+
+	<br><br>
+	<hr>
+	<br><br>
+
+	
+</div>
+
+<div id="formContainer"></div>
+
+<hr>
+
+<button onclick="getJsonFromHtml();">JSON</button>
+
+<hr>
+
+<div id="jsonOut"></div>
+
+<script type="text/javascript">
+	
+function addElement(type) {
+	// alert(type);
+
+	switch (type) {
+		case 'form': addForm();
+		break;
+		case 'text': addInput(type);
+		break;
+		case 'password': addInput(type);
+		break;
+		case 'select': addSelect();
+		break;
+		case 'radio': addInput(type);//addRadio();
+		break;
+		case 'checkbox': addInput(type);
+		break;
+		case 'file': addInput(type);
+		break;
+		case 'datainit': addDatainit();
+		break;
+		case 'number': addInput(type);
+		break;
+		case 'keygen': addKeygen();
+		break;
+		case 'textarea': addTextarea();
+		break;
+		case 'output': addOutput();
+		break;
+	}
+
+}
+
+function addForm() {
+	//('Going to add a form');
+
+	var labe = prompt("Form Label");
+	var actio = prompt("Form Action");
+	var metho = prompt("Form Method");
+
+	$("#formContainer").append(
+		// form label
+		$("<label/>", {
+			for: labe,
+		}).append(labe),
+		// form
+		$("<form/>", {
+			name: labe,
+			action: actio,
+			method: metho,
+			enctype: 'multipart/form-data'
+		}).append(
+		// adding submit button inside form
+		$("<input/>", {
+			type: 'submit',
+			value: 'Submit',
+			id: 'submit'
+		}))
+		, $("<br/>"), $("<br/>")
+	);
+
+	// now display hidden buttons as the form has been added
+	$("#buttons").css('visibility', 'visible');
+}
+
+function addText() {
+	var name = getName();
+	// now prepending
+	// $("#formContainer form").prependTo(
+	// 		// adding label
+	// 		$("<label/>", {
+	// 			for: name,
+	// 		}).append(getLabel()),
+
+	// 		// adding text
+	// 		$("<input/>", {
+	// 			type: 'text',
+	// 			name: name,
+	// 			value: getValue()
+	// 		})
+	// 	);
+
+	$("<div/>").append(
+			// adding label
+			$("<label/>", {
+				for: name,
+			}).append(getLabel()),
+
+			// adding text
+			$("<input/>", {
+				type: 'text',
+				name: name,
+				value: getValue()
+			})
+			, $("<br/>")
+		).prependTo("#formContainer form");
+}
+
+function addTextarea() {
+	var name = getName();
+	$("#formContainer form").prepend(
+			// adding label
+			$("<label/>", {
+				for: name,
+			}).append(getLabel()),
+
+			$("<br/>"),
+			// adding text
+			$("<textarea/>", {
+				name: name,
+				rows: 4,
+				cols: 50,
+				value: getValue()
+			})
+			, $("<br/>")
+		);
+}
+
+function addFile() {
+	var name = getName();
+	$("#formContainer form").prepend(
+			// adding label
+			$("<label/>", {
+				for: name,
+			}).append(getLabel()),
+
+			// adding text
+			$("<input/>", {
+				type: type_,
+				name: name,
+				value: getValue()
+			})
+			, $("<br/>")
+		);	
+}
+
+function addKeygen() {
+	var name = getName();
+	$("#formContainer form").prepend(
+			// adding label
+			$("<label/>", {
+				for: name,
+			}).append(getLabel()),
+
+			// adding text
+			$("<keygen/>", {
+				name: name
+			})
+			, $("<br/>")
+		);
+}
+
+function addOutput() {
+	var name = getName();
+	$("#formContainer form").prepend(
+			// adding label
+			$("<label/>", {
+				for: name,
+			}).append(getLabel()),
+
+			// adding text
+			$("<output/>", {
+				name: name,
+				value: getValue()
+			})
+			, $("<br/>")
+		);
+}
+
+function addSelect() {
+	var name = getName();
+	var numOptions = prompt("Number of options");
+	var num = parseInt(numOptions);
+
+	var s = $("<select id=\"selectId\" name=\"" + name + "\" />");
+
+	for (var i = 0; i <= num; i++) {
+		var val = getValue();
+		var texti = getTextToShow();
+
+	    $("<option />", {value: val, text: texti}).appendTo(s);
+	}
+
+	$("#formContainer form").prepend(
+			s,
+			$("<br/>")
+		);
+	
+	// for(var val in data) {
+	//     $("<option />", {value: val, text: data[val]}).appendTo(s);
+	// }
+
+
+}
+
+
+function addInput(type_) {
+	var name = getName();
+	$("#formContainer form").prepend(
+			// adding label
+			$("<label/>", {
+				for: name,
+			}).append(getLabel()),
+
+			// adding text
+			$("<input/>", {
+				type: type_,
+				name: name,
+				value: getValue()
+			})
+			, $("<br/>")
+		);
+}
+
+function getLabel() {
+	var label = prompt("Label");
+	return label;
+}
+
+function getName() {
+	var name = prompt("Name");
+	return name;
+}
+
+function getValue() {
+	var value = prompt("Value");
+	return value;	
+}
+
+function getTextToShow() {
+	var text = prompt("Text to show!");
+	return text;
+}
+
+function getJsonFromHtml() {
+	$('#jsonOut').text(JSON.stringify({ 
+        data:$('#input').html() 
+    }));
+}
+
+</script>
+
+</body>
+</html>
