@@ -45,7 +45,7 @@
 
 <hr>
 
-<button onclick="getJsonFromHtml();">JSON</button>
+<button onclick="storeJSON();">JSON</button>
 
 <hr>
 
@@ -292,6 +292,104 @@ function getJsonFromHtml() {
     }));
 }
 
+</script>
+
+
+<script type="text/javascript">
+// save JSON data in local storage
+// var updateLocalData = function(data) {
+	// localStorage.setItem("form", JSON.stringify(data));
+// }
+
+
+function storeJSON() {
+	var data = getFormJSON();
+	// localStorage.setItem("form", JSON.stringify(data));
+	localStorage.setItem("form", data);
+	console.log('stored');
+}
+
+// load JSON data from local storage
+var getLocalData = function() {
+	var formData = JSON.parse(localStorage.getItem("form"));
+	if ( formData !== null) {
+		return buildForm(formData);
+	}
+}
+
+function buildForm(formData) {
+	document.write(formData);
+}
+
+</script>
+
+<!-- HTML to JSON functions & testing -->
+
+<script type="text/javascript">
+// Reference: http://stackoverflow.com/a/12984095/3578289
+
+// Test with an element.
+
+function getFormJSON() {
+	var initElement = document.getElementsByTagName("form")[0];
+	var json = mapDOM(initElement, true);
+	// var json = JSON.stringify(initElement);
+	console.log(json);
+	return json;
+
+}
+
+// Test with a string.
+// initElement = "<div><span>text</span>Text2</div>";
+// json = mapDOM(initElement, true);
+// console.log(json);
+
+function mapDOM(element, json) {
+    var treeObject = {};
+
+    // If string convert to document Node
+    if (typeof element === "string") {
+        if (window.DOMParser) {
+              parser = new DOMParser();
+              docNode = parser.parseFromString(element,"text/xml");
+        } else { // Microsoft strikes again
+              docNode = new ActiveXObject("Microsoft.XMLDOM");
+              docNode.async = false;
+              docNode.loadXML(element); 
+        } 
+        element = docNode.firstChild;
+    }
+
+    //Recursively loop through DOM elements and assign properties to object
+    function treeHTML(element, object) {
+        object["type"] = element.nodeName;
+        var nodeList = element.childNodes;
+        if (nodeList != null) {
+            if (nodeList.length) {
+                object["content"] = [];
+                for (var i = 0; i < nodeList.length; i++) {
+                    if (nodeList[i].nodeType == 3) {
+                        object["content"].push(nodeList[i].nodeValue);
+                    } else {
+                        object["content"].push({});
+                        treeHTML(nodeList[i], object["content"][object["content"].length -1]);
+                    }
+                }
+            }
+        }
+        if (element.attributes != null) {
+            if (element.attributes.length) {
+                object["attributes"] = {};
+                for (var i = 0; i < element.attributes.length; i++) {
+                    object["attributes"][element.attributes[i].nodeName] = element.attributes[i].nodeValue;
+                }
+            }
+        }
+    }
+    treeHTML(element, treeObject);
+
+    return (json) ? JSON.stringify(treeObject) : treeObject;
+}
 </script>
 
 </body>
