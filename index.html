@@ -21,14 +21,14 @@
 	<br/>
 
 <div id="buttons" style="visibility: hidden;">
-	
+
 	<button id="add1" onclick="addElement('text');">Text</button>
 	<button id="add1" onclick="addElement('password');">Password</button>
 	<button id="add1" onclick="addElement('select');">Select > Options</button>
 	<button id="add1" onclick="addElement('radio');">Radio</button>
 	<button id="add1" onclick="addElement('checkbox');">Check Box</button>
 	<button id="add1" onclick="addElement('file');">File</button>
-	<button id="add1" onclick="addElement('datainit');">Datainit > options</button>
+	<!-- <button id="add1" onclick="addElement('datainit');">Datainit > options</button> -->
 	<button id="add1" onclick="addElement('number');">Numbers</button>
 	<button id="add1" onclick="addElement('keygen');">Keygen</button>
 	<button id="add1" onclick="addElement('textarea');">Text Area</button>
@@ -38,7 +38,7 @@
 	<hr>
 	<br><br>
 
-	
+
 </div>
 
 <div id="formContainer"></div>
@@ -52,28 +52,30 @@
 <div id="jsonOut"></div>
 
 <script type="text/javascript">
-	
+
 function addElement(type) {
 	// alert(type);
 
 	switch (type) {
 		case 'form': addForm();
 		break;
-		case 'text': addInput(type);
+		case 'text': addText();//addInput(type);
 		break;
-		case 'password': addInput(type);
+		case 'password': addInput(type); // addInput(type);
 		break;
 		case 'select': addSelect();
 		break;
-		case 'radio': addInput(type);//addRadio();
+		case 'radio': addRadio();
 		break;
 		case 'checkbox': addInput(type);
 		break;
-		case 'file': addInput(type);
+		case 'file': addFile();
 		break;
 		case 'datainit': addDatainit();
 		break;
-		case 'number': addInput(type);
+		// case 'number': addInput(type);
+		// break;
+		case 'number': addNumber();
 		break;
 		case 'keygen': addKeygen();
 		break;
@@ -94,9 +96,11 @@ function addForm() {
 
 	$("#formContainer").append(
 		// form label
-		$("<label/>", {
-			for: labe,
-		}).append(labe),
+		$("<h2/>").append(
+			$("<label/>", {
+				for: labe,
+			}).append(labe)
+		),
 		// form
 		$("<form/>", {
 			name: labe,
@@ -117,24 +121,68 @@ function addForm() {
 	$("#buttons").css('visibility', 'visible');
 }
 
+function addPassword() {
+	var name = getName();
+	$("#formContainer form").prepend(
+			// adding label
+			$("<label/>", {
+				for: name,
+			}).append(getLabel()),
+
+			// adding text
+			$("<input/>", {
+				type: 'password',
+				name: name,
+				min: prompt("Minimum value"),
+				max: prompt("Maximum value"),
+				value: getValue()
+			})
+			, $("<br/>")
+		);
+}
+
+function addNumber() {
+	var name = getName();
+	$("#formContainer form").prepend(
+			// adding label
+			$("<label/>", {
+				for: name,
+			}).append(getLabel()),
+
+			// adding text
+			$("<input/>", {
+				type: 'number',
+				name: name,
+				min: prompt("Minimum value"),
+				max: prompt("Maximum value"),
+				value: getValue()
+			})
+			, $("<br/>")
+		);
+}
+
+function addRadio() {
+	var name = getName();
+	$("#formContainer form").prepend(
+			// adding label
+			$("<label/>", {
+				for: name,
+			}).append(getLabel()),
+
+			// adding text
+			$("<input/>", {
+				type: 'radio',
+				name: name,
+				value: getValue(),
+				required: "true"
+			})
+			, $("<br/>")
+		);
+}
+
 function addText() {
 	var name = getName();
-	// now prepending
-	// $("#formContainer form").prependTo(
-	// 		// adding label
-	// 		$("<label/>", {
-	// 			for: name,
-	// 		}).append(getLabel()),
-
-	// 		// adding text
-	// 		$("<input/>", {
-	// 			type: 'text',
-	// 			name: name,
-	// 			value: getValue()
-	// 		})
-	// 	);
-
-	$("<div/>").append(
+	$("#formContainer form").prepend(
 			// adding label
 			$("<label/>", {
 				for: name,
@@ -144,10 +192,13 @@ function addText() {
 			$("<input/>", {
 				type: 'text',
 				name: name,
-				value: getValue()
+				min: prompt("Minimum Characters"),
+				max: prompt("Maximum Characters"),
+				value: getValue(),
+				required: prompt("Is required? true / false")
 			})
 			, $("<br/>")
-		).prependTo("#formContainer form");
+		);
 }
 
 function addTextarea() {
@@ -180,12 +231,12 @@ function addFile() {
 
 			// adding text
 			$("<input/>", {
-				type: type_,
+				type: 'file',
 				name: name,
-				value: getValue()
+				required: prompt("Is required? true / false");
 			})
 			, $("<br/>")
-		);	
+		);
 }
 
 function addKeygen() {
@@ -226,7 +277,10 @@ function addSelect() {
 	var numOptions = prompt("Number of options");
 	var num = parseInt(numOptions);
 
-	var s = $("<select id=\"selectId\" name=\"" + name + "\" />");
+	var s = $("<select id=\"selectId\" required=\"true\" name=\"" + name + "\" />");
+
+	// adding first prompting option
+	$("<option/>", {text: "Select a " + name});
 
 	for (var i = 0; i <= num; i++) {
 		var val = getValue();
@@ -239,7 +293,7 @@ function addSelect() {
 			s,
 			$("<br/>")
 		);
-	
+
 	// for(var val in data) {
 	//     $("<option />", {value: val, text: data[val]}).appendTo(s);
 	// }
@@ -260,7 +314,8 @@ function addInput(type_) {
 			$("<input/>", {
 				type: type_,
 				name: name,
-				value: getValue()
+				min: prompt("Minimum Characters"),
+				max: prompt("Maximum Characters")
 			})
 			, $("<br/>")
 		);
@@ -278,7 +333,7 @@ function getName() {
 
 function getValue() {
 	var value = prompt("Value");
-	return value;	
+	return value;
 }
 
 function getTextToShow() {
@@ -287,8 +342,8 @@ function getTextToShow() {
 }
 
 function getJsonFromHtml() {
-	$('#jsonOut').text(JSON.stringify({ 
-        data:$('#input').html() 
+	$('#jsonOut').text(JSON.stringify({
+        data:$('#input').html()
     }));
 }
 
@@ -355,8 +410,8 @@ function mapDOM(element, json) {
         } else { // Microsoft strikes again
               docNode = new ActiveXObject("Microsoft.XMLDOM");
               docNode.async = false;
-              docNode.loadXML(element); 
-        } 
+              docNode.loadXML(element);
+        }
         element = docNode.firstChild;
     }
 
