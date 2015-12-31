@@ -2,37 +2,47 @@
 <head>
 	<title>Dynamic Form - HTML 5</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<style type="text/css">
-#buttons button {
-	margin: auto;
-}
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
-#formBtn {
-	font-size: 20px;
-	margin: auto;
-	display: block;
-}
-</style>
+
+	<style type="text/css">
+	body {
+		margin: 2%;
+	}
+	#buttons button {
+		margin: auto;
+	}
+
+	input {
+		margin-bottom: 5px;
+	}
+
+	#formBtn {
+		font-size: 20px;
+		margin: auto;
+		display: block;
+	}
+	</style>
 
 </head>
 <body>
 
-	<button id="formBtn" onclick="addElement('form');">Create Form</button>
+	<button class="btn btn-default" id="formBtn" onclick="addElement('form');">Create Form</button>
 	<br/>
 
 <div id="buttons" style="visibility: hidden;">
 
-	<button id="add1" onclick="addElement('text');">Text</button>
-	<button id="add1" onclick="addElement('password');">Password</button>
-	<button id="add1" onclick="addElement('select');">Select > Options</button>
-	<button id="add1" onclick="addElement('radio');">Radio</button>
-	<button id="add1" onclick="addElement('checkbox');">Check Box</button>
-	<button id="add1" onclick="addElement('file');">File</button>
+	<button class="btn btn-primary" id="add1" onclick="addElement('text');">Text</button>
+	<button class="btn btn-primary" id="add1" onclick="addElement('password');">Password</button>
+	<button class="btn btn-primary" id="add1" onclick="addElement('select');">Select > Options</button>
+	<button class="btn btn-primary" id="add1" onclick="addElement('radio');">Radio</button>
+	<button class="btn btn-primary" id="add1" onclick="addElement('checkbox');">Check Box</button>
+	<button class="btn btn-primary" id="add1" onclick="addElement('file');">File</button>
 	<!-- <button id="add1" onclick="addElement('datainit');">Datainit > options</button> -->
-	<button id="add1" onclick="addElement('number');">Numbers</button>
-	<button id="add1" onclick="addElement('keygen');">Keygen</button>
-	<button id="add1" onclick="addElement('textarea');">Text Area</button>
-	<button id="add1" onclick="addElement('output');">Output</button>
+	<button class="btn btn-primary" id="add1" onclick="addElement('number');">Numbers</button>
+	<button class="btn btn-primary" id="add1" onclick="addElement('keygen');">Keygen</button>
+	<button class="btn btn-primary" id="add1" onclick="addElement('textarea');">Text Area</button>
+	<button class="btn btn-primary" id="add1" onclick="addElement('output');">Output</button>
 
 	<br><br>
 	<hr>
@@ -45,17 +55,14 @@
 
 <hr>
 
-<button onclick="storeJSON();">JSON</button>
+<button class="btn btn-primary" onclick="storeJSON();">JSON</button>
 
 <hr>
 
 <div id="jsonOut"></div>
 
 <script type="text/javascript">
-
 function addElement(type) {
-	// alert(type);
-
 	switch (type) {
 		case 'form': addForm();
 		break;
@@ -84,12 +91,9 @@ function addElement(type) {
 		case 'output': addOutput();
 		break;
 	}
-
 }
 
 function addForm() {
-	//('Going to add a form');
-
 	var labe = prompt("Form Label");
 	var actio = prompt("Form Action");
 	var metho = prompt("Form Method");
@@ -112,6 +116,7 @@ function addForm() {
 		$("<input/>", {
 			type: 'submit',
 			value: 'Submit',
+			class: 'btn btn-success',
 			id: 'submit'
 		}))
 		, $("<br/>"), $("<br/>")
@@ -126,7 +131,7 @@ function addPassword() {
 	$("#formContainer form").prepend(
 			// adding label
 			$("<label/>", {
-				for: name,
+				for: name + " " ,
 			}).append(getLabel()),
 
 			// adding text
@@ -134,8 +139,8 @@ function addPassword() {
 				type: 'password',
 				name: name,
 				min: prompt("Minimum value"),
-				max: prompt("Maximum value"),
-				value: getValue()
+				max: prompt("Maximum value")
+				// , value: getValue()
 			})
 			, $("<br/>")
 		);
@@ -154,8 +159,8 @@ function addNumber() {
 				type: 'number',
 				name: name,
 				min: prompt("Minimum value"),
-				max: prompt("Maximum value"),
-				value: getValue()
+				max: prompt("Maximum value")
+				// , value: getValue()
 			})
 			, $("<br/>")
 		);
@@ -167,7 +172,10 @@ function addRadio() {
 			// adding label
 			$("<label/>", {
 				for: name,
-			}).append(getLabel()),
+			}).append(
+				// getLabel()
+				name + " "
+			),
 
 			// adding text
 			$("<input/>", {
@@ -186,7 +194,10 @@ function addText() {
 			// adding label
 			$("<label/>", {
 				for: name,
-			}).append(getLabel()),
+			}).append(
+				// getLabel()
+				name + " "
+			),
 
 			// adding text
 			$("<input/>", {
@@ -207,7 +218,10 @@ function addTextarea() {
 			// adding label
 			$("<label/>", {
 				for: name,
-			}).append(getLabel()),
+			}).append(
+				// getLabel()
+				name + " "
+			),
 
 			$("<br/>"),
 			// adding text
@@ -227,13 +241,16 @@ function addFile() {
 			// adding label
 			$("<label/>", {
 				for: name,
-			}).append(getLabel()),
+			}).append(
+				// getLabel()
+				name + " "
+			),
 
 			// adding text
 			$("<input/>", {
 				type: 'file',
 				name: name,
-				required: prompt("Is required? true / false");
+				required: prompt("Is required? true / false")
 			})
 			, $("<br/>")
 		);
@@ -245,7 +262,10 @@ function addKeygen() {
 			// adding label
 			$("<label/>", {
 				for: name,
-			}).append(getLabel()),
+			}).append(
+				// getLabel()
+				name + " "
+			),
 
 			// adding text
 			$("<keygen/>", {
@@ -262,7 +282,10 @@ function addOutput() {
 			// adding label
 			$("<label/>", {
 				for: name,
-			}).append(getLabel()),
+			}).append(
+				// getLabel()
+				name + " "
+			),
 
 			// adding text
 			$("<output/>", {
@@ -309,7 +332,10 @@ function addInput(type_) {
 			// adding label
 			$("<label/>", {
 				for: name,
-			}).append(getLabel()),
+			}).append(
+				// getLabel()
+				name + " "
+			),
 
 			// adding text
 			$("<input/>", {
@@ -348,10 +374,6 @@ function getJsonFromHtml() {
     }));
 }
 
-</script>
-
-
-<script type="text/javascript">
 // save JSON data in local storage
 // var updateLocalData = function(data) {
 	// localStorage.setItem("form", JSON.stringify(data));
@@ -377,11 +399,9 @@ function buildForm(formData) {
 	document.write(formData);
 }
 
-</script>
 
-<!-- HTML to JSON functions & testing -->
+// <!-- HTML to JSON functions & testing -->
 
-<script type="text/javascript">
 // Reference: http://stackoverflow.com/a/12984095/3578289
 
 // Test with an element.
